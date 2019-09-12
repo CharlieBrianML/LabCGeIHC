@@ -43,9 +43,13 @@ bool exitApp = false;
 int lastMousePosX, offsetX = 0;
 int lastMousePosY, offsetY = 0;
 
-float rot1 = 0.0, rot2 = 0.0;
+float rot1 = 0.0, rot2 = 0.0;///1
+float rot3 = 0.0, rot4 = 0.0;///2
+float rot5 = 0.0, rot6 = 0.0;
+float rot0 = 0.0, dz = 0.0;///Variables para rotar y desplazar en el eje z
+bool sentido = true;
 
-double deltaTime;
+double deltaTime;///1
 
 // Se definen todos las funciones.
 void reshapeCallback(GLFWwindow* Window, int widthRes, int heightRes);
@@ -210,10 +214,27 @@ bool processInput(bool continueApplication){
 	offsetX = 0;
 	offsetY = 0;
 
-	if(glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-		rot1 += 0.001;
-	if(glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-		rot2 += 0.001;
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)///3
+		sentido = false;///1
+
+	if(glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && sentido)
+		rot1 += 0.001;///1
+	else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !sentido)
+		rot1 -= 0.001;///3
+	if(glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && sentido)
+		rot2 += 0.001;///1
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && sentido)
+		rot3 += 0.001;///2
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && sentido)
+		rot4 += 0.001;///2
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && sentido)
+		rot0 = 0.001;///4
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && sentido)
+		rot0 = -0.001;///2
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && sentido)
+		dz = 0.001;///2
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS && sentido)
+		dz = -0.001;///2
 
 	glfwPollEvents();
 	return continueApplication;
@@ -221,6 +242,7 @@ bool processInput(bool continueApplication){
 
 void applicationLoop() {
 	bool psi = true;
+	glm::mat4 model = glm::mat4(1.0f);
 	while (psi) {
 		psi = processInput(true);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -231,8 +253,9 @@ void applicationLoop() {
 		shader.setMatrix4("projection", 1, false, glm::value_ptr(projection));
 		shader.setMatrix4("view", 1, false, glm::value_ptr(view));
 
-		glm::mat4 model = glm::mat4(1.0f);
-
+		//glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0, 0, dz));//Me muevo en z
+		model = glm::rotate(model,rot0, glm::vec3(0, 1, 0));//Rota la figura
 		//box1.enableWireMode();
 		box1.render(glm::scale(model, glm::vec3(1.0, 1.0, 0.1)));
 
@@ -240,6 +263,9 @@ void applicationLoop() {
 		glm::mat4 j1 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		sphere1.enableWireMode();
 		sphere1.render(glm::scale(j1, glm::vec3(0.1, 0.1, 0.1)));
+		j1 = glm::rotate(j1,rot1,glm::vec3(0,0,1));///1
+		j1 = glm::rotate(j1,rot2, glm::vec3(0, 1, 0));///1
+
 
 		// Hueso 1
 		glm::mat4 l1 = glm::translate(j1, glm::vec3(0.25f, 0.0, 0.0));
@@ -249,6 +275,8 @@ void applicationLoop() {
 
 		// Articulacion 2
 		glm::mat4 j2 = glm::translate(j1, glm::vec3(0.5, 0.0f, 0.0f));
+		j2 = glm::rotate(j2, rot3,glm::vec3(0.0, 0.0, 1.0));///2
+		j2 = glm::rotate(j2, rot4,glm::vec3(1.0, 0.0, 0.0));///2
 		sphere1.enableWireMode();
 		sphere1.render(glm::scale(j2, glm::vec3(0.1, 0.1, 0.1)));
 
@@ -268,7 +296,8 @@ void applicationLoop() {
 		sphere2.render(glm::scale(ojo2, glm::vec3(0.2, 0.2, 0.1)));
 
 		shader.turnOff();
-
+		dz = 0;////
+		rot0 = 0;//////
 		glfwSwapBuffers(window);
 	}
 }
