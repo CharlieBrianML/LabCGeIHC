@@ -9,11 +9,14 @@ uniform mat4 view;
 uniform mat4 model;
 
 uniform float offsetX;
+uniform vec2 scaleUV;///3
 
 void main(){
 
 	gl_Position = projection * view * model * vec4(in_position, 1.0);
 	our_uv = in_uv;
 	our_uv.x = our_uv.x + offsetX;
+	if (scaleUV.x !=0 && scaleUV.y !=0)////3
+		our_uv = our_uv * scaleUV;///3
 }
 
