@@ -41,6 +41,8 @@ Shader shader;
 Shader shaderTexture;
 // Descomentar El shader para iluminacion
 Shader shaderColorLighting;///7
+//Shader para iluminar la textura
+Shader shaderTextureLighting;
 
 std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
 
@@ -167,7 +169,8 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	box1.init();
 	// Settea el shader a utilizar
-	box1.setShader(&shaderTexture);
+	//box1.setShader(&shaderTexture);
+	box1.setShader(&shaderTextureLighting);//t
 	box1.setColor(glm::vec4(1.0, 1.0, 0.0, 1.0));
 
 	box2.init();
@@ -442,17 +445,22 @@ void applicationLoop() {
 		shader.setMatrix4("projection", 1, false, glm::value_ptr(projection));
 		shader.setMatrix4("view", 1, false, glm::value_ptr(view));
 		// Settea la matriz de vista y projection al nuevo shader
-		shaderTexture.setMatrix4("projection", 1, false,
-			glm::value_ptr(projection));
+		shaderTexture.setMatrix4("projection", 1, false,glm::value_ptr(projection));
 		shaderTexture.setMatrix4("view", 1, false, glm::value_ptr(view));
 
 		// Descomentar
 		shaderColorLighting.setMatrix4("projection", 1, false, glm::value_ptr(projection));///7
 		shaderColorLighting.setMatrix4("view", 1, false, glm::value_ptr(view));///7
-		shaderColorLighting.setVectorFloat3("viewPos", glm::value_ptr(camera->getPosition()));//12
+		/*shaderColorLighting.setVectorFloat3("viewPos", glm::value_ptr(camera->getPosition()));//12
 		shaderColorLighting.setVectorFloat3("light.ambient", glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));////9
 		shaderColorLighting.setVectorFloat3("light.diffuse", glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
-		shaderColorLighting.setVectorFloat3("light.specular", glm::value_ptr(glm::vec3(0.9, 0.0, 0.0)));//12
+		shaderColorLighting.setVectorFloat3("light.specular", glm::value_ptr(glm::vec3(0.9, 0.0, 0.0)));//12*/
+
+				// Settea la matriz de vista y projection al shader con iluminacion con textura
+		shaderTextureLighting.setMatrix4("projection", 1, false,//t
+			glm::value_ptr(projection));
+		shaderTextureLighting.setMatrix4("view", 1, false,
+			glm::value_ptr(view));//t
 
 		glm::mat4 lightModelmatrix = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(1.0f, 0.0f, 0.0f));
 		lightModelmatrix = glm::translate(lightModelmatrix, glm::vec3(0.0f, 0.0f, -ratio));

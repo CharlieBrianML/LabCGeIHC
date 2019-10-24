@@ -32,7 +32,7 @@
 int screenWidth;
 int screenHeight;
 
-GLFWwindow * window;
+GLFWwindow* window;
 
 Shader shader;
 //Descomentar
@@ -45,7 +45,7 @@ Sphere sphere2(20, 20);
 Sphere sphere3(20, 20);
 Cylinder cylinder1(20, 20, 0.5, 0.5);
 Cylinder cylinder2(20, 20, 0.5, 0.5);
-Box box1,box2;
+Box box1, box2;
 
 // Descomentar
 GLuint textureID1, textureID2, textureID3;//Buffer orientado a textura //1
@@ -64,7 +64,7 @@ double deltaTime;
 // Se definen todos las funciones.
 void reshapeCallback(GLFWwindow* Window, int widthRes, int heightRes);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action,
-		int mode);
+	int mode);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void mouseButtonCallback(GLFWwindow* window, int button, int state, int mod);
 void init(int width, int height, std::string strTitle, bool bFullScreen);
@@ -88,15 +88,15 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	if (bFullScreen)
 		window = glfwCreateWindow(width, height, strTitle.c_str(),
-				glfwGetPrimaryMonitor(), nullptr);
+			glfwGetPrimaryMonitor(), nullptr);
 	else
 		window = glfwCreateWindow(width, height, strTitle.c_str(), nullptr,
-				nullptr);
+			nullptr);
 
 	if (window == nullptr) {
 		std::cerr
-				<< "Error to create GLFW window, you can try download the last version of your video card that support OpenGL 3.3+"
-				<< std::endl;
+			<< "Error to create GLFW window, you can try download the last version of your video card that support OpenGL 3.3+"
+			<< std::endl;
 		destroy();
 		exit(-1);
 	}
@@ -167,10 +167,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//Definiendo la textura a utilizar //1
 	Texture texture1("../Textures/sponge.jpg");
 	//Carga el mapa de bits(tipo de dato de la libreria) //1
-	FIBITMAP *bitmap = texture1.loadImage();
+	FIBITMAP* bitmap = texture1.loadImage();
 	//Convertimos el mapa de bits en un arreglo unidimencional de tipo unsigned//1
-	unsigned char *data = texture1.convertToData(bitmap, imageWidth,
-			imageHeight);
+	unsigned char* data = texture1.convertToData(bitmap, imageWidth,
+		imageHeight);
 	//Creando la textura con id 1 //1
 	glGenTextures(1, &textureID1);
 	//Enlazar esa textura a un tipo de textura de 2D //1
@@ -188,10 +188,11 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 		//Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
 		//a los datos
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
-		GL_BGRA, GL_UNSIGNED_BYTE, data);
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
 		//Genera los niveles del mipmap, (OpenGL es el encargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
+	}
+	else
 		std::cout << "Failed to load texture" << std::endl;
 	//Libera la memoria de la textura
 	texture1.freeImage(bitmap);
@@ -232,9 +233,9 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	texture2.freeImage(bitmap);
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//Definiendo la textura a utilizar //1
+		//Definiendo la textura a utilizar //1
 	Texture texture3("../Textures/goku.png");
 	//Carga el mapa de bits(tipo de dato de la libreria) //1
 	bitmap = texture3.loadImage(true);///7.1
@@ -290,7 +291,7 @@ void reshapeCallback(GLFWwindow* Window, int widthRes, int heightRes) {
 }
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action,
-		int mode) {
+	int mode) {
 	if (action == GLFW_PRESS) {
 		switch (key) {
 		case GLFW_KEY_ESCAPE:
@@ -353,10 +354,10 @@ bool processInput(bool continueApplication) {
 	else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && !sentido)
 		rot1 -= 0.001;
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS
-			&& glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		&& glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		rot2 += 0.001;
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS
-			&& glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+		&& glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
 		rot2 -= 0.001;
 	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && sentido)
 		rot3 += 0.001;
@@ -389,13 +390,13 @@ void applicationLoop() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-				(float) screenWidth / (float) screenHeight, 0.01f, 100.0f);
+			(float)screenWidth / (float)screenHeight, 0.01f, 100.0f);
 		glm::mat4 view = camera->getViewMatrix();
 
 		shader.setMatrix4("projection", 1, false, glm::value_ptr(projection));
 		shader.setMatrix4("view", 1, false, glm::value_ptr(view));
 		//Descomentar
-		//Settea la matriz de ista y prijection al nuevo shader //1
+		//Settea la matriz de ista y projection al nuevo shader //1
 		shaderTexture.setMatrix4("projection", 1, false, glm::value_ptr(projection));
 		shaderTexture.setMatrix4("view", 1, false, glm::value_ptr(view));
 
@@ -446,15 +447,15 @@ void applicationLoop() {
 		glm::mat4 ojo2 = glm::translate(model, glm::vec3(-0.25, 0.25, 0.05));
 		//sphere2.enableWireMode();
 		sphere2.render(glm::scale(ojo2, glm::vec3(0.2, 0.2, 0.1)));
-////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
 		glm::mat4 modelAgua = glm::mat4(1.0);
-		modelAgua= glm::translate(modelAgua, glm::vec3(0.0,-3.0, 0.0));///5
-		modelAgua = glm::scale(modelAgua,glm::vec3(5.0,0.01,5.0));///5
+		modelAgua = glm::translate(modelAgua, glm::vec3(0.0, -3.0, 0.0));///5
+		modelAgua = glm::scale(modelAgua, glm::vec3(5.0, 0.01, 5.0));///5
 		glBindTexture(GL_TEXTURE_2D, textureID2);
 		shaderTexture.setFloat("offsetX", offX);
 		box2.render(modelAgua);
 		glBindTexture(GL_TEXTURE_2D, 0);
-/////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////
 		glm::mat4 modelSphere = glm::mat4(1.0);
 		modelSphere = glm::translate(modelSphere, glm::vec3(3.0, 0.0, 0.0));///7
 		//modelAgua = glm::scale(modelAgua, glm::vec3(5.0, 0.01, 5.0));///7
@@ -462,17 +463,17 @@ void applicationLoop() {
 		shaderTexture.setFloat("offsetX", 0);
 		sphere3.render(modelSphere);
 		glBindTexture(GL_TEXTURE_2D, 0);
-//////////////////////////////////////////////////////////////////////////////8
+		//////////////////////////////////////////////////////////////////////////////8
 		glm::mat4 modelCylinder = glm::mat4(1.0);
 		modelCylinder = glm::translate(modelCylinder, glm::vec3(-3.0, 0.0, 0.0));///8
 		glBindTexture(GL_TEXTURE_2D, textureID1);
 		shaderTexture.setFloat("offsetX", 0);
-		cylinder2.render(0,cylinder2.getSlices()*cylinder2.getStacks() *6,cylinder2.getmodelCylinder);///9
+		//cylinder2.render(0, cylinder2.getSlices() * cylinder2.getStacks() * 6, cylinder2.getmodelCylinder);///9
 		glBindTexture(GL_TEXTURE_2D, 0);
 		///Tapa superior
-		cylinder2.render(0, cylinder2.getSlices()*cylinder2.getStacks() * 6, modelCylinder);///10
+		cylinder2.render(0, cylinder2.getSlices() * cylinder2.getStacks() * 6, modelCylinder);///10
 		//Tapa inferior
-		cylinder2.render(0, cylinder2.getSlices()*cylinder2.getStacks() * 6, modelCylinder);///10
+		cylinder2.render(0, cylinder2.getSlices() * cylinder2.getStacks() * 6, modelCylinder);///10
 
 		shader.turnOff();
 
@@ -484,7 +485,7 @@ void applicationLoop() {
 	}
 }
 
-int main(int argc, char ** argv) {
+int main(int argc, char** argv) {
 	init(800, 700, "Window GLFW", false);
 	applicationLoop();
 	destroy();
@@ -495,4 +496,3 @@ int main(int argc, char ** argv) {
 ///Bajar una textura de gim y ponerle transparencia
 ///Texturizado de una cocacola
 ///Texturizado al modelo del bob esponja, aplicarle todo lo de la practica
-
