@@ -997,17 +997,21 @@ void applicationLoop() {
 	float ratio = 30.0;
 	glm::mat4 matrixModelAircraft = glm::mat4(1.0);//5 Ponemos como global
 	matrixModelAircraft = glm::translate(matrixModelAircraft, glm::vec3(8.0, 2.0, -10.0));
+
 	int state = 0;
 	int statePickup = 0;
+
 	int onoff = 0;
 	float offsetAircraftAdvance = 0.0;
 	float offsetAircraftRot = 0.0;
+
 	float offsetPickupAdvance = 0.0;
 	float offsetPickupRot = 0.0;
 	float offsetARot = 0.0;
 	float lightSpecular = 0.0;
+	float color = 1.0;
 	float contador = 0.0;
-	float constant = 0.0;
+
 	while (psi) {
 		psi = processInput(true);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1147,30 +1151,230 @@ void applicationLoop() {
 		shaderMulLighting.setFloat("pointLights[4].quadratic", 0.004);
 
 		//Esto es para colocar las esferas de las luces
-		sphereLamp.setScale(glm::vec3(0.1, 0.1, 0.1));
-		sphereLamp.setPosition(glm::vec3(12.5, -3.0, 4.0));
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.3, -1.0, 4.05));
+		sphereLamp.setColor(glm::vec4(0.0, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.3, -1.05, 3.9));
+		sphereLamp.setColor(glm::vec4(color, 0.0, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.2, -1.1, 3.85));
+		sphereLamp.setColor(glm::vec4(0.0, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.1, -1.15, 3.9));
+		sphereLamp.setColor(glm::vec4(color, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.0, -1.2, 4.05));
+		sphereLamp.setColor(glm::vec4(color, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.1, -1.25, 4.2));
+		sphereLamp.setColor(glm::vec4(0.0, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.3, -1.3, 4.2));
+		sphereLamp.setColor(glm::vec4(color, 0.0, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.5, -1.35, 4.0));
+		sphereLamp.setColor(glm::vec4(0.0, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.5, -1.4, 3.8));
+		sphereLamp.setColor(glm::vec4(color, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.4, -1.45, 3.6));
+		sphereLamp.setColor(glm::vec4(color, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.2, -1.5, 3.6));
+		sphereLamp.setColor(glm::vec4(0.0, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.0, -1.55, 3.8));
+		sphereLamp.setColor(glm::vec4(color, 0.0, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.8, -1.6, 4.1));
+		sphereLamp.setColor(glm::vec4(0.0, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.7, -1.65, 4.4));
+		sphereLamp.setColor(glm::vec4(color, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.8, -1.7, 4.6));
+		sphereLamp.setColor(glm::vec4(color, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.1, -1.75, 4.6));
+		sphereLamp.setColor(glm::vec4(0.0, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.3, -1.8, 4.4));
+		sphereLamp.setColor(glm::vec4(color, 0.0, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.5, -1.85, 4.1));
+		sphereLamp.setColor(glm::vec4(0.0, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.5, -1.9, 3.8));
+		sphereLamp.setColor(glm::vec4(color, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.3, -1.95, 3.5));
+		sphereLamp.setColor(glm::vec4(color, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.1, -2.0, 3.5));
+		sphereLamp.setColor(glm::vec4(0.0, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.8, -2.05, 3.8));
+		sphereLamp.setColor(glm::vec4(color, 0.0, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.7, -2.1, 4.1));
+		sphereLamp.setColor(glm::vec4(0.0, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.8, -2.15, 4.4));
+		sphereLamp.setColor(glm::vec4(color, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.0, -2.2, 4.7));
+		sphereLamp.setColor(glm::vec4(color, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.2, -2.25, 4.7));
+		sphereLamp.setColor(glm::vec4(0.0, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.4, -2.3, 4.4));
+		sphereLamp.setColor(glm::vec4(color, 0.0, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.6, -2.35, 4.1));
+		sphereLamp.setColor(glm::vec4(0.0, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.3, -2.4, 3.8));
+		sphereLamp.setColor(glm::vec4(color, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.0, -2.45, 3.5));
+		sphereLamp.setColor(glm::vec4(color, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.8, -2.5, 3.7));
+		sphereLamp.setColor(glm::vec4(0.0, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.6, -2.55, 3.9));
+		sphereLamp.setColor(glm::vec4(color, 0.0, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.8, -2.6, 4.1));
+		sphereLamp.setColor(glm::vec4(0.0, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.0, -2.65, 4.3));
+		sphereLamp.setColor(glm::vec4(color, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.3, -2.7, 4.5));
+		sphereLamp.setColor(glm::vec4(color, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.6, -2.75, 4.5));
+		sphereLamp.setColor(glm::vec4(0.0, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.9, -2.8, 4.2));
+		sphereLamp.setColor(glm::vec4(color, 0.0, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.9, -2.85, 3.9));
+		sphereLamp.setColor(glm::vec4(0.0, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.6, -2.9, 3.6));
+		sphereLamp.setColor(glm::vec4(color, color, 0.0, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.3, -2.95, 3.3));
+		sphereLamp.setColor(glm::vec4(color, 0.0, color, 1.0));
+		sphereLamp.render();
+
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(13.0, -3.0, 3.3));
 		sphereLamp.setColor(glm::vec4(0.0, 1.0, 0.0, 1.0));
 		sphereLamp.render();
 
-		sphereLamp.setScale(glm::vec3(0.1, 0.1, 0.1));
-		sphereLamp.setPosition(glm::vec3(12.5, -4.0, 5.0));
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.7, -3.05, 3.7));
 		sphereLamp.setColor(glm::vec4(1.0, 0.0, 0.0, 1.0));
 		sphereLamp.render();
 
-		sphereLamp.setScale(glm::vec3(0.1, 0.1, 0.1));
-		sphereLamp.setPosition(glm::vec3(12.5, -2.5, 4.5));
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.4, -3.1, 4.1));
 		sphereLamp.setColor(glm::vec4(0.0, 0.0, 1.0, 1.0));
 		sphereLamp.render();
 
-		sphereLamp.setScale(glm::vec3(0.1, 0.1, 0.1));
-		sphereLamp.setPosition(glm::vec3(12.5, -3.0, 5.2));
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.4, -3.15, 4.5));
 		sphereLamp.setColor(glm::vec4(0.8, 0.8, 0.0, 1.0));
 		sphereLamp.render();
 
-		sphereLamp.setScale(glm::vec3(0.1, 0.1, 0.2));//4
-		sphereLamp.setPosition(glm::vec3(12.5, -3.2, 5.0));
+		sphereLamp.setScale(glm::vec3(0.05, 0.05, 0.05));
+		sphereLamp.setPosition(glm::vec3(12.7, -3.2, 4.9));
 		sphereLamp.setColor(glm::vec4(0.9, 0.0, 0.9, 1.0));
-		sphereLamp.render();//4
+		sphereLamp.render();
 
 		glm::mat4 lightModelmatrix = glm::rotate(glm::mat4(1.0f), angle,
 				glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1937,7 +2141,7 @@ void applicationLoop() {
 		glActiveTexture(GL_TEXTURE0);*/
 
 		glm::mat4 matrixModelTree = glm::mat4(1.0);
-		matrixModelTree = glm::translate(matrixModelTree, glm::vec3(13.5, -5.0, 4.0));
+		matrixModelTree = glm::translate(matrixModelTree, glm::vec3(13.2, -5.0, 4.0));
 		matrixModelTree = glm::rotate(matrixModelTree, glm::radians(90.0f), glm::vec3(-1.0, 0.0, 0.0));
 		matrixModelTree = glm::scale(matrixModelTree, glm::vec3(0.028, 0.028, 0.028));
 		modelChristmasTree.render(matrixModelTree);
@@ -2019,7 +2223,7 @@ void applicationLoop() {
 			if (contador > 1.0) {
 				onoff = 1;
 				lightSpecular = 0.6;
-				constant = 1.0;
+				color = 1.0;
 				contador = 0.0;
 			}
 			break;
@@ -2029,7 +2233,7 @@ void applicationLoop() {
 			if (contador > 1.0) {
 				onoff = 0;
 				lightSpecular = 0.006;
-				constant = 0.0;
+				color = 0.0;
 				contador = 0.0;
 			}
 		default:
