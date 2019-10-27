@@ -12,6 +12,9 @@ newmtl cloth
 	Kd 0.2706 0.0706 0.0706
 	Ks 0.0078 0.0078 0.0078
 	Ke 0.0000 0.0000 0.0000
+	map_Ka madera.jpg
+	map_Kd madera.jpg
+
 
 newmtl red
 	Ns 50.0000
@@ -24,6 +27,8 @@ newmtl red
 	Kd 0.7490 0.0000 0.0000
 	Ks 1.0000 1.0000 0.3490
 	Ke 0.0000 0.0000 0.0000
+	map_Ka esferaRoja.jpg
+	map_Kd esferaRoja.jpg
 
 newmtl loop
 	Ns 20.0000
@@ -48,6 +53,8 @@ newmtl ball_metall
 	Kd 0.6588 0.6196 0.4824
 	Ks 0.6839 0.6620 0.5741
 	Ke 0.0000 0.0000 0.0000
+	map_Ka esferaVerde.jpg
+	map_Kd esferaVerde.jpg
 
 newmtl pink
 	Ns 50.0000
@@ -60,6 +67,8 @@ newmtl pink
 	Kd 1.0000 0.5020 0.8000
 	Ks 0.0784 0.8549 0.9490
 	Ke 0.0000 0.0000 0.0000
+	map_Ka esferaDorada.jpg
+	map_Kd esferaDorada.jpg
 
 newmtl blue
 	Ns 50.0000
@@ -72,6 +81,8 @@ newmtl blue
 	Kd 0.0706 0.0000 1.0000
 	Ks 0.6863 0.3490 1.0000
 	Ke 0.0000 0.0000 0.0000
+	map_Ka esferaAzul.jpg
+	map_Kd esferaAzul.jpg
 
 newmtl yellow
 	Ns 50.0000
@@ -84,6 +95,8 @@ newmtl yellow
 	Kd 1.0000 0.7176 0.0000
 	Ks 1.0000 0.5059 0.5765
 	Ke 0.0000 0.0000 0.0000
+	map_Ka esferaAmarilla.jpg
+	map_Kd esferaAmarilla.jpg
 
 newmtl Christmas_Tree
 	Ns 10.0000
