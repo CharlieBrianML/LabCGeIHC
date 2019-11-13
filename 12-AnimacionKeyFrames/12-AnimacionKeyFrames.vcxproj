@@ -19,6 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shaders\colorShader.fs" />
+    <None Include="..\Shaders\colorShader.vs" />
+    <None Include="..\Shaders\cubeTexture.fs" />
+    <None Include="..\Shaders\cubeTexture.vs" />
+    <None Include="..\Shaders\iluminacion_color_res.fs" />
+    <None Include="..\Shaders\iluminacion_color_res.vs" />
+    <None Include="..\Shaders\iluminacion_material.vs" />
+    <None Include="..\Shaders\iluminacion_material_res.fs" />
+    <None Include="..\Shaders\iluminacion_texture_res.fs" />
+    <None Include="..\Shaders\iluminacion_texture_res.vs" />
+    <None Include="..\Shaders\multipleLights.fs" />
+    <None Include="..\Shaders\texturizado_res.fs" />
+    <None Include="..\Shaders\texturizado_res.vs" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\Cylinder.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
@@ -46,34 +61,34 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{5b48aad4-dc74-4332-bf60-2e95c9b1d9e5}</ProjectGuid>
-    <RootNamespace>_12_AnimacionKeyFrames</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{5B48AAD4-DC74-4332-BF60-2E95C9B1D9E5}</ProjectGuid>
+    <RootNamespace>_10_Animacion</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -96,8 +111,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\external\glm;..\..\external\glew\include;..\..\external\glfw\include;..\..\external\FreeImage\include;..\..\external\assimp\include;../../external/OpenAL/include;../../external/freealut/include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\external\glew\lib\;..\..\external\glfw\lib;..\..\external\FreeImage\lib;..\..\external\assimp\lib;../../external/OpenAL/lib;../../external/freealut/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\external\glm;..\external\glew\include;..\external\glfw\include;..\external\FreeImage\include;..\external\assimp\include;..\external\OpenAL/include;..\external\freealut\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;..\external\glew\lib\;..\external\glfw\lib;..\external\FreeImage\lib;..\external\assimp\lib;../external/OpenAL/lib;..\external\freealut\lib</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,7 +122,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32d.lib;glfw3.lib;opengl32.lib;glu32.lib;assimp-vc140-mt.lib;FreeImaged.lib;alut.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);glew32d.lib;glfw3.lib;opengl32.lib;glu32.lib;assimp-vc140-mt.lib;FreeImaged.lib;alut.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

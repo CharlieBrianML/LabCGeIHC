@@ -19,6 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shaders\colorShader.fs" />
+    <None Include="..\Shaders\colorShader.vs" />
+    <None Include="..\Shaders\cubeTexture.fs" />
+    <None Include="..\Shaders\cubeTexture.vs" />
+    <None Include="..\Shaders\iluminacion_color_res.fs" />
+    <None Include="..\Shaders\iluminacion_color_res.vs" />
+    <None Include="..\Shaders\iluminacion_material.vs" />
+    <None Include="..\Shaders\iluminacion_material_res.fs" />
+    <None Include="..\Shaders\iluminacion_texture_res.fs" />
+    <None Include="..\Shaders\iluminacion_texture_res.vs" />
+    <None Include="..\Shaders\multipleLights.fs" />
+    <None Include="..\Shaders\texturizado_res.fs" />
+    <None Include="..\Shaders\texturizado_res.vs" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\Cylinder.cpp" />
     <ClCompile Include="src\FirstPersonCamera.cpp" />
@@ -46,15 +61,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-<<<<<<< HEAD:11-AnimacionKeyFrames/11-AnimacionKeyFrames.vcxproj
-    <ProjectGuid>{2351b8dc-0b6b-4f9b-8f65-117802d51356}</ProjectGuid>
-    <RootNamespace>_11_AnimacionKeyFrames</RootNamespace>
+    <ProjectGuid>{A420F145-B4D8-43EE-8F21-71DDEA42041B}</ProjectGuid>
+    <RootNamespace>_10_Animacion</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-=======
-    <ProjectGuid>{a420f145-b4d8-43ee-8f21-71ddea42041b}</ProjectGuid>
-    <RootNamespace>_11_AnimacionCompleja</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
->>>>>>> b4888fca85692e908348dad2a4aead8d30d1627a:11-AnimacionCompleja/11-AnimacionCompleja.vcxproj
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -102,8 +111,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\external\glm;..\external\glew\include;..\external\glfw\include;..\external\FreeImage\include;..\external\assimp\include;../external/OpenAL/include;../external/freealut/include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\external\glew\lib\;..\external\glfw\lib;..\external\FreeImage\lib;..\external\assimp\lib;../external/OpenAL/lib;../external/freealut/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\external\glm;..\external\glew\include;..\external\glfw\include;..\external\FreeImage\include;..\external\assimp\include;..\external\OpenAL/include;..\external\freealut\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;..\external\glew\lib\;..\external\glfw\lib;..\external\FreeImage\lib;..\external\assimp\lib;../external/OpenAL/lib;..\external\freealut\lib</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +122,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32d.lib;glfw3.lib;opengl32.lib;glu32.lib;assimp-vc140-mt.lib;FreeImaged.lib;alut.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);glew32d.lib;glfw3.lib;opengl32.lib;glu32.lib;assimp-vc140-mt.lib;FreeImaged.lib;alut.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

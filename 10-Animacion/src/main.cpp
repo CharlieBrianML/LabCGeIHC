@@ -38,7 +38,7 @@
 int screenWidth;
 int screenHeight;
 
-GLFWwindow *window;
+GLFWwindow* window;
 
 Shader shader;
 //Shader de texturizado
@@ -89,9 +89,11 @@ Model modelLamp1;
 Model modelChristmasTree;
 Model modelLamborginhi;
 Model modelPickup;
+Model modelHelicopter, modelHelicopter2, modelHelicopter3;
 
 GLuint textureID1, textureID2, textureID3, textureID4, textureID5, textureID6, textureID7, textureID8;
 GLuint textureID9, textureID10, textureID11, textureID12, textureID13, textureID14, textureID15, textureID16;
+GLuint textureID17, textureID18, textureID19, textureID20, textureID21, textureID22, textureID23, textureID24;
 GLuint skyboxTextureID;
 
 GLenum types[6] = {
@@ -121,11 +123,11 @@ bool sentido = true;
 double deltaTime;
 
 // Se definen todos las funciones.
-void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes);
-void keyCallback(GLFWwindow *window, int key, int scancode, int action,
-		int mode);
-void mouseCallback(GLFWwindow *window, double xpos, double ypos);
-void mouseButtonCallback(GLFWwindow *window, int button, int state, int mod);
+void reshapeCallback(GLFWwindow* Window, int widthRes, int heightRes);
+void keyCallback(GLFWwindow* window, int key, int scancode, int action,
+	int mode);
+void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+void mouseButtonCallback(GLFWwindow* window, int button, int state, int mod);
 void init(int width, int height, std::string strTitle, bool bFullScreen);
 void destroy();
 bool processInput(bool continueApplication = true);
@@ -147,15 +149,15 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	if (bFullScreen)
 		window = glfwCreateWindow(width, height, strTitle.c_str(),
-				glfwGetPrimaryMonitor(), nullptr);
+			glfwGetPrimaryMonitor(), nullptr);
 	else
 		window = glfwCreateWindow(width, height, strTitle.c_str(), nullptr,
-				nullptr);
+			nullptr);
 
 	if (window == nullptr) {
 		std::cerr
-				<< "Error to create GLFW window, you can try download the last version of your video card that support OpenGL 3.3+"
-				<< std::endl;
+			<< "Error to create GLFW window, you can try download the last version of your video card that support OpenGL 3.3+"
+			<< std::endl;
 		destroy();
 		exit(-1);
 	}
@@ -185,17 +187,17 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	shader.initialize("../Shaders/colorShader.vs", "../Shaders/colorShader.fs");
 	shaderTexture.initialize("../Shaders/texturizado_res.vs",
-			"../Shaders/texturizado_res.fs");
+		"../Shaders/texturizado_res.fs");
 	shaderColorLighting.initialize("../Shaders/iluminacion_color_res.vs",
-			"../Shaders/iluminacion_color_res.fs");
+		"../Shaders/iluminacion_color_res.fs");
 	shaderTextureLighting.initialize("../Shaders/iluminacion_texture_res.vs",
-			"../Shaders/iluminacion_texture_res.fs");
+		"../Shaders/iluminacion_texture_res.fs");
 	shaderMaterialLighting.initialize("../Shaders/iluminacion_material.vs",
-			"../Shaders/iluminacion_material_res.fs");
+		"../Shaders/iluminacion_material_res.fs");
 	shaderSkybox.initialize("../Shaders/cubeTexture.vs",
-			"../Shaders/cubeTexture.fs");
+		"../Shaders/cubeTexture.fs");
 	shaderMulLighting.initialize("../Shaders/iluminacion_texture_res.vs",
-			"../Shaders/multipleLights.fs");
+		"../Shaders/multipleLights.fs");
 
 	// Inicializar los buffers VAO, VBO, EBO
 	sphere1.init();
@@ -326,6 +328,15 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelPickup.loadModel("../models/car/Pickup/L200-OBJ.obj");
 	modelPickup.setShader(&shaderMulLighting);
 
+	modelHelicopter.loadModel("../models/Helicopter/Mi_24_chasis.obj");
+	modelHelicopter.setShader(&shaderMulLighting);
+
+	modelHelicopter2.loadModel("../models/Helicopter/Mi_24.obj");
+	modelHelicopter2.setShader(&shaderMulLighting);
+
+	modelHelicopter3.loadModel("../models/Helicopter/Mi_24_heli.obj");
+	modelHelicopter3.setShader(&shaderMulLighting);
+
 	camera->setPosition(glm::vec3(11.5, -2.5, 10.0));
 
 	// Descomentar
@@ -334,10 +345,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Definiendo la textura a utilizar
 	Texture texture1("../Textures/sponge.jpg");
 	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
-	FIBITMAP *bitmap = texture1.loadImage();
+	FIBITMAP* bitmap = texture1.loadImage();
 	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
-	unsigned char *data = texture1.convertToData(bitmap, imageWidth,
-			imageHeight);
+	unsigned char* data = texture1.convertToData(bitmap, imageWidth,
+		imageHeight);
 	// Creando la textura con id 1
 	glGenTextures(1, &textureID1);
 	// Enlazar esa textura a una tipo de textura de 2D.
@@ -355,10 +366,11 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
 		// a los datos
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
-		GL_BGRA, GL_UNSIGNED_BYTE, data);
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
 		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
+	}
+	else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
 	texture1.freeImage(bitmap);
@@ -386,10 +398,11 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
 		// a los datos
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
-		GL_BGRA, GL_UNSIGNED_BYTE, data);
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
 		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
+	}
+	else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
 	texture2.freeImage(bitmap);
@@ -418,10 +431,11 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
 		// a los datos
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
-		GL_BGRA, GL_UNSIGNED_BYTE, data);
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
 		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
+	}
+	else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
 	texture3.freeImage(bitmap);
@@ -450,10 +464,11 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
 		// a los datos
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
-		GL_BGRA, GL_UNSIGNED_BYTE, data);
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
 		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
+	}
+	else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
 	texture4.freeImage(bitmap);
@@ -482,15 +497,16 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
 		// a los datos
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
-		GL_BGRA, GL_UNSIGNED_BYTE, data);
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
 		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
+	}
+	else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
 	texture5.freeImage(bitmap);
 
-//-------------------------------------Texturas de la casa-------------------------------------------------------------
+	//-------------------------------------Texturas de la casa-------------------------------------------------------------
 	Texture texturePared("../Textures/House/pared4.jpg");
 	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
 	// Voltear la imagen
@@ -843,9 +859,137 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Libera la memoria de la textura
 	textureVidrio.freeImage(bitmap);
 
-//--------------------------------------------------------------------------------------------------------------------
+	Texture textureCarretera("../Textures/House/carretera.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = textureCarretera.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = textureCarretera.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID16);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID16);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureCarretera.freeImage(bitmap);
 
-	// Carga de texturas para el skybox
+	Texture textureCarretera2("../Textures/House/carretera2.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = textureCarretera2.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = textureCarretera2.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID17);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID17);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureCarretera2.freeImage(bitmap);
+
+	Texture textureGround("../Textures/House/pasto1.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = textureGround.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = textureGround.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID18);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID18);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureGround.freeImage(bitmap);
+
+	Texture texturePlatform("../Textures/House/plataforma.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = texturePlatform.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = texturePlatform.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID19);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID19);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	texturePlatform.freeImage(bitmap);
+
+	//--------------------------------------------------------------------------------------------------------------------
+
+		// Carga de texturas para el skybox
 	Texture skyboxTexture = Texture("");
 	glGenTextures(1, &skyboxTextureID);
 	// Tipo de textura CUBE MAP
@@ -858,13 +1002,14 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	for (int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(types); i++) {
 		skyboxTexture = Texture(fileNames[i]);
-		FIBITMAP *bitmap = skyboxTexture.loadImage(true);
-		unsigned char *data = skyboxTexture.convertToData(bitmap, imageWidth,
-				imageHeight);
+		FIBITMAP* bitmap = skyboxTexture.loadImage(true);
+		unsigned char* data = skyboxTexture.convertToData(bitmap, imageWidth,
+			imageHeight);
 		if (data) {
 			glTexImage2D(types[i], 0, GL_RGBA, imageWidth, imageHeight, 0,
-			GL_BGRA, GL_UNSIGNED_BYTE, data);
-		} else
+				GL_BGRA, GL_UNSIGNED_BYTE, data);
+		}
+		else
 			std::cout << "Failed to load texture" << std::endl;
 		skyboxTexture.freeImage(bitmap);
 	}
@@ -885,14 +1030,14 @@ void destroy() {
 	shader.destroy();
 }
 
-void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes) {
+void reshapeCallback(GLFWwindow* Window, int widthRes, int heightRes) {
 	screenWidth = widthRes;
 	screenHeight = heightRes;
 	glViewport(0, 0, widthRes, heightRes);
 }
 
-void keyCallback(GLFWwindow *window, int key, int scancode, int action,
-		int mode) {
+void keyCallback(GLFWwindow* window, int key, int scancode, int action,
+	int mode) {
 	if (action == GLFW_PRESS) {
 		switch (key) {
 		case GLFW_KEY_ESCAPE:
@@ -902,14 +1047,14 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action,
 	}
 }
 
-void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	offsetX = xpos - lastMousePosX;
 	offsetY = ypos - lastMousePosY;
 	lastMousePosX = xpos;
 	lastMousePosY = ypos;
 }
 
-void mouseButtonCallback(GLFWwindow *window, int button, int state, int mod) {
+void mouseButtonCallback(GLFWwindow* window, int button, int state, int mod) {
 	if (state == GLFW_PRESS) {
 		switch (button) {
 		case GLFW_MOUSE_BUTTON_RIGHT:
@@ -948,28 +1093,28 @@ bool processInput(bool continueApplication) {
 	offsetY = 0;
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+		glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 		rot1 += 0.001;
 	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+		glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 		rot1 -= 0.001;
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
 		rot2 += 0.001;
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
 		rot2 -= 0.001;
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+		glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
 		rot3 += 0.001;
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+		glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
 		rot3 -= 0.001;
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+		glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
 		rot4 += 0.001;
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+		glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
 		rot4 -= 0.001;
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
@@ -998,12 +1143,24 @@ void applicationLoop() {
 	glm::mat4 matrixModelAircraft = glm::mat4(1.0);//5 Ponemos como global
 	matrixModelAircraft = glm::translate(matrixModelAircraft, glm::vec3(8.0, 2.0, -10.0));
 
-	int state = 0;
+	glm::mat4 matrixModelPickup = glm::mat4(1.0);
+	matrixModelPickup = glm::translate(matrixModelPickup, glm::vec3(2.0, -5.0, -9.0));
+	matrixModelPickup = glm::scale(matrixModelPickup, glm::vec3(0.1, 0.1, 0.1));
+
+	glm::mat4 matrixModelHelicopter = glm::mat4(1.0);
+	matrixModelHelicopter = glm::translate(matrixModelHelicopter, glm::vec3(-5.0, 6.0, 9.0));
+	matrixModelHelicopter = glm::scale(matrixModelHelicopter, glm::vec3(2.0, 2.0, 2.0));
+
+	glm::mat4 matrixModelHelicopter2 = glm::mat4(matrixModelHelicopter);
+	glm::mat4 matrixModelHelicopter3 = glm::mat4(matrixModelHelicopter);
+
+
+	int stateHelicopter = 0;
 	int statePickup = 0;
+	float rotPickup = 0.0;
 
 	int onoff = 0;
-	float offsetAircraftAdvance = 0.0;
-	float offsetAircraftRot = 0.0;
+	float HelicopterAdvance = 0.0;
 
 	float offsetPickupAdvance = 0.0;
 	float offsetPickupRot = 0.0;
@@ -1017,7 +1174,7 @@ void applicationLoop() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-				(float) screenWidth / (float) screenHeight, 0.01f, 100.0f);
+			(float)screenWidth / (float)screenHeight, 0.01f, 100.0f);
 		glm::mat4 view = camera->getViewMatrix();
 
 		// Settea la matriz de vista y projection al shader con solo color
@@ -1025,56 +1182,56 @@ void applicationLoop() {
 		shader.setMatrix4("view", 1, false, glm::value_ptr(view));
 		// Settea la matriz de vista y projection al shader con solo textura
 		shaderTexture.setMatrix4("projection", 1, false,
-				glm::value_ptr(projection));
+			glm::value_ptr(projection));
 		shaderTexture.setMatrix4("view", 1, false, glm::value_ptr(view));
 
 		// Settea la matriz de vista y projection al shader con iluminacion solo color
 		shaderColorLighting.setMatrix4("projection", 1, false,
-				glm::value_ptr(projection));
+			glm::value_ptr(projection));
 		shaderColorLighting.setMatrix4("view", 1, false, glm::value_ptr(view));
 
 		// Settea la matriz de vista y projection al shader con iluminacion con textura
 		shaderTextureLighting.setMatrix4("projection", 1, false,
-				glm::value_ptr(projection));
+			glm::value_ptr(projection));
 		shaderTextureLighting.setMatrix4("view", 1, false,
-				glm::value_ptr(view));
+			glm::value_ptr(view));
 
 		// Settea la matriz de vista y projection al shader con iluminacion con material
 		shaderMaterialLighting.setMatrix4("projection", 1, false,
-				glm::value_ptr(projection));
+			glm::value_ptr(projection));
 		shaderMaterialLighting.setMatrix4("view", 1, false,
-				 glm::value_ptr(view));
+			glm::value_ptr(view));
 
 		// Settea la matriz de vista y projection al shader con skybox
 		shaderSkybox.setMatrix4("projection", 1, false,
-				glm::value_ptr(projection));
+			glm::value_ptr(projection));
 		shaderSkybox.setMatrix4("view", 1, false,
-				glm::value_ptr(glm::mat4(glm::mat3(view))));
+			glm::value_ptr(glm::mat4(glm::mat3(view))));
 		// Settea la matriz de vista y projection al shader con multiples luces
 		shaderMulLighting.setMatrix4("projection", 1, false,
-					glm::value_ptr(projection));
+			glm::value_ptr(projection));
 		shaderMulLighting.setMatrix4("view", 1, false,
-				glm::value_ptr(view));
+			glm::value_ptr(view));
 
 		// Propiedades de la luz para objetos con color
 		shaderColorLighting.setVectorFloat3("viewPos",
-				glm::value_ptr(camera->getPosition()));
+			glm::value_ptr(camera->getPosition()));
 		shaderColorLighting.setVectorFloat3("light.ambient",
-				glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
+			glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
 		shaderColorLighting.setVectorFloat3("light.diffuse",
-				glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
+			glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
 		shaderColorLighting.setVectorFloat3("light.specular",
-				glm::value_ptr(glm::vec3(0.9, 0.0, 0.0)));
+			glm::value_ptr(glm::vec3(0.9, 0.0, 0.0)));
 
 		// Propiedades de la luz para objetos con textura
 		shaderTextureLighting.setVectorFloat3("viewPos",
-				glm::value_ptr(camera->getPosition()));
+			glm::value_ptr(camera->getPosition()));
 		shaderTextureLighting.setVectorFloat3("light.ambient",
-				glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
+			glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
 		shaderTextureLighting.setVectorFloat3("light.diffuse",
-				glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
+			glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
 		shaderTextureLighting.setVectorFloat3("light.specular",
-				glm::value_ptr(glm::vec3(0.9, 0.0, 0.0)));
+			glm::value_ptr(glm::vec3(0.9, 0.0, 0.0)));
 
 		// Propiedades de la luz para objetos con textura
 		shaderMaterialLighting.setVectorFloat3("viewPos", glm::value_ptr(camera->getPosition()));
@@ -1113,7 +1270,7 @@ void applicationLoop() {
 		shaderMulLighting.setFloat("pointLights[0].constant", 1.0);
 		shaderMulLighting.setFloat("pointLights[0].linear", 0.04);
 		shaderMulLighting.setFloat("pointLights[0].quadratic", 0.004);
-		
+
 		//Propiedades de la luz roja
 		shaderMulLighting.setVectorFloat3("pointLights[1].position", glm::value_ptr((glm::vec3(13.0, -4.0, 3.0))));
 		shaderMulLighting.setVectorFloat3("pointLights[1].light.ambient", glm::value_ptr(glm::vec3(0.001, 0.001, 0.001)));
@@ -1125,9 +1282,9 @@ void applicationLoop() {
 
 		//Propiedades de la luz azul
 		shaderMulLighting.setVectorFloat3("pointLights[2].position", glm::value_ptr((glm::vec3(13.0, -3.0, 3.2))));
-		shaderMulLighting.setVectorFloat3("pointLights[2].light.ambient", glm::value_ptr(glm::vec3(0.001,0.001,0.001)));
+		shaderMulLighting.setVectorFloat3("pointLights[2].light.ambient", glm::value_ptr(glm::vec3(0.001, 0.001, 0.001)));
 		shaderMulLighting.setVectorFloat3("pointLights[2].light.diffuse", glm::value_ptr(glm::vec3(0.0, 0.0, 0.01)));
-		shaderMulLighting.setVectorFloat3("pointLights[2].light.specular", glm::value_ptr(glm::vec3(0.0, 0.0,lightSpecular)));
+		shaderMulLighting.setVectorFloat3("pointLights[2].light.specular", glm::value_ptr(glm::vec3(0.0, 0.0, lightSpecular)));
 		shaderMulLighting.setFloat("pointLights[2].constant", 1.0);
 		shaderMulLighting.setFloat("pointLights[2].linear", 0.04);
 		shaderMulLighting.setFloat("pointLights[2].quadratic", 1.0);
@@ -1377,29 +1534,29 @@ void applicationLoop() {
 		sphereLamp.render();
 
 		glm::mat4 lightModelmatrix = glm::rotate(glm::mat4(1.0f), angle,
-				glm::vec3(1.0f, 0.0f, 0.0f));
+			glm::vec3(1.0f, 0.0f, 0.0f));
 		lightModelmatrix = glm::translate(lightModelmatrix,
-				glm::vec3(0.0f, 0.0f, -ratio));
+			glm::vec3(0.0f, 0.0f, -ratio));
 		// Posicion luz para objetos con color
 		shaderColorLighting.setVectorFloat3("light.position",
-				glm::value_ptr(
-						glm::vec4(
-								lightModelmatrix
-										* glm::vec4(0.0, 0.0, 0.0, 1.0))));
+			glm::value_ptr(
+				glm::vec4(
+					lightModelmatrix
+					* glm::vec4(0.0, 0.0, 0.0, 1.0))));
 
 		// Posicion luz para objetos con textura
 		shaderTextureLighting.setVectorFloat3("light.position",
-				glm::value_ptr(
-						glm::vec4(
-								lightModelmatrix
-										* glm::vec4(0.0, 0.0, 0.0, 1.0))));
+			glm::value_ptr(
+				glm::vec4(
+					lightModelmatrix
+					* glm::vec4(0.0, 0.0, 0.0, 1.0))));
 
 		// Posicion luz para objetos con materiales
 		shaderMaterialLighting.setVectorFloat3("light.position",
-				glm::value_ptr(
-						glm::vec4(
-								lightModelmatrix
-									* glm::vec4(0.0, 0.0, 0.0, 1.0))));
+			glm::value_ptr(
+				glm::vec4(
+					lightModelmatrix
+					* glm::vec4(0.0, 0.0, 0.0, 1.0))));
 		sphereLamp.setScale(glm::vec3(1, 1, 1));
 		sphereLamp.setPosition(glm::vec3(0, 0, 0));
 		sphereLamp.setColor(glm::vec4(1.0, 1.0, 1.0, 1.0));
@@ -1591,8 +1748,8 @@ void applicationLoop() {
 		rot0 = 0;
 		offX += 0.001;
 
-//---------------------------------------------Iniciamos a definir la casa----------------------------------------------------------------------------------
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Pared 1 - Pared derecha de la casa<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		//---------------------------------------------Iniciamos a definir la casa----------------------------------------------------------------------------------
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Pared 1 - Pared derecha de la casa<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		glm::mat4 pared1Model = glm::mat4(1.0);
 		pared1Model = glm::translate(pared1Model, glm::vec3(15.0, 0.0, 0.0));
 		pared1Model = glm::rotate(pared1Model, glm::radians(90.0f), glm::vec3(0, 1.0, 0));
@@ -2063,6 +2220,104 @@ void applicationLoop() {
 		sphereLamp2.render(modelLamp4);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Terreno<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		glm::mat4 modelGround = glm::mat4(1.0);
+		modelGround = glm::translate(modelGround, glm::vec3(0.0, -5.2, 0.0));
+		modelGround = glm::rotate(modelGround, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelGround = glm::scale(modelGround, glm::vec3(100.0, 100.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID18);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelGround);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Carretera<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		glm::mat4 modelHighway1 = glm::mat4(1.0);
+		modelHighway1 = glm::translate(modelHighway1, glm::vec3(2.0, -5.0, 0.0));
+		modelHighway1 = glm::rotate(modelHighway1, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway1 = glm::rotate(modelHighway1, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway1 = glm::scale(modelHighway1, glm::vec3(24.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID16);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelHighway1);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway2 = glm::mat4(1.0);
+		modelHighway2 = glm::translate(modelHighway2, glm::vec3(21.0, -5.0, 0.0));
+		modelHighway2 = glm::rotate(modelHighway2, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway2 = glm::rotate(modelHighway2, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway2 = glm::scale(modelHighway2, glm::vec3(24.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID16);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelHighway2);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway3 = glm::mat4(1.0);
+		modelHighway3 = glm::translate(modelHighway3, glm::vec3(11.5, -5.0, -15.0));
+		modelHighway3 = glm::rotate(modelHighway3, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway3 = glm::scale(modelHighway3, glm::vec3(13.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID16);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelHighway3);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway4 = glm::mat4(1.0);
+		modelHighway4 = glm::translate(modelHighway4, glm::vec3(11.5, -5.0, 15.0));
+		modelHighway4 = glm::rotate(modelHighway4, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway4 = glm::scale(modelHighway4, glm::vec3(13.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID16);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelHighway4);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway5 = glm::mat4(1.0);
+		modelHighway5 = glm::translate(modelHighway5, glm::vec3(2.0, -5.0, -15.0));
+		modelHighway5 = glm::rotate(modelHighway5, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway5 = glm::rotate(modelHighway5, glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway5 = glm::scale(modelHighway5, glm::vec3(6.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID17);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelHighway5);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway6 = glm::mat4(1.0);
+		modelHighway6 = glm::translate(modelHighway6, glm::vec3(2.0, -5.0, 15.0));
+		modelHighway6 = glm::rotate(modelHighway6, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway6 = glm::rotate(modelHighway6, glm::radians(-180.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway6 = glm::scale(modelHighway6, glm::vec3(6.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID17);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelHighway6);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway7 = glm::mat4(1.0);
+		modelHighway7 = glm::translate(modelHighway7, glm::vec3(21.0, -5.0, -15.0));
+		modelHighway7 = glm::rotate(modelHighway7, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway7 = glm::scale(modelHighway7, glm::vec3(6.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID17);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelHighway7);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway8 = glm::mat4(1.0);
+		modelHighway8 = glm::translate(modelHighway8, glm::vec3(21.0, -5.0, 15.0));
+		modelHighway8 = glm::rotate(modelHighway8, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway8 = glm::rotate(modelHighway8, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway8 = glm::scale(modelHighway8, glm::vec3(6.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID17);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelHighway8);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Plataforma del helicoptero<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		glm::mat4 modelPlatform = glm::mat4(1.0);
+		modelPlatform = glm::translate(modelPlatform, glm::vec3(-5.0, -5.0, 30.0));
+		modelPlatform = glm::rotate(modelPlatform, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelPlatform = glm::scale(modelPlatform, glm::vec3(15.0, 15.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID19);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelPlatform);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
 		//----------------------------------------------Modelos----------------------------------------------------
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Camas<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		/**glm::mat4 matrixModelBed = glm::mat4(1.0);
@@ -2156,56 +2411,57 @@ void applicationLoop() {
 		//Forzar a habilitar a la unidad de textura 0-----------------IMPORTANTE
 		glActiveTexture(GL_TEXTURE0);*/
 
-		glm::mat4 matrixModelPickup = glm::mat4(1.0);
-		//matrixModelPickup = glm::translate(matrixModelPickup, glm::vec3(6.0, -5.0, 4.0));
+		/*glm::mat4 matrixModelPickup = glm::mat4(1.0);
+		matrixModelPickup = glm::translate(matrixModelPickup, glm::vec3(2.0, -5.0, 4.0));
 		//matrixModelPickup = glm::rotate(matrixModelPickup, glm::radians(90.0f), glm::vec3(-1.0, 0.0, 0.0));
-		matrixModelPickup = glm::scale(matrixModelPickup, glm::vec3(0.1, 0.1, 0.1));
+		matrixModelPickup = glm::scale(matrixModelPickup, glm::vec3(0.1, 0.1, 0.1));*/
 		modelPickup.render(matrixModelPickup);
 		//Forzar a habilitar a la unidad de textura 0-----------------IMPORTANTE
 		glActiveTexture(GL_TEXTURE0);
 
-		/*switch (state)///5
+		modelHelicopter.render(matrixModelHelicopter);
+		//glActiveTexture(GL_TEXTURE0);
+		modelHelicopter2.render(matrixModelHelicopter);
+		//glActiveTexture(GL_TEXTURE0);
+		modelHelicopter3.render(matrixModelHelicopter);
+		glActiveTexture(GL_TEXTURE0);
+
+		switch (stateHelicopter)
 		{
 		case 0:
-			std::cout << "Advance:" << std::endl;//5
-			// -0.01 debe ser igual
-			matrixModelAircraft = glm::translate(matrixModelAircraft,glm::vec3(0.0,0.0,-0.01));//5
-			offsetAircraftAdvance += 0.01;//6
-			if (offsetAircraftAdvance > 2.0) {
-				offsetAircraftAdvance = 0.0;
-				state = 1;
+			std::cout << "Advance Helicopter:" << HelicopterAdvance << std::endl;
+			matrixModelHelicopter = glm::translate(matrixModelHelicopter, glm::vec3(0.0, -0.01, 0.01));//5
+			HelicopterAdvance += 0.01;
+			if (HelicopterAdvance > 5.5) {
+				HelicopterAdvance = 0.0;
+				stateHelicopter = 1;
 			}
 			break;
 		case 1:
-			std::cout << "Turn" << std::endl;
-			matrixModelAircraft = glm::translate(matrixModelAircraft, glm::vec3(0,0,-0.01));//7
-			matrixModelAircraft = glm::rotate(matrixModelAircraft, glm::radians(0.05f),glm::vec3(0,1,0));
-			offsetAircraftRot += 0.05;
-			if (offsetAircraftRot > 90) {
-				offsetAircraftRot = 0.0;
-				state = 0;
-			}//6
+			std::cout << "Turn Helicopter" << std::endl;
+			matrixModelHelicopter = glm::translate(matrixModelHelicopter, glm::vec3(0.0, 5.0, -5.5));
+			stateHelicopter = 0;
 		default:
 			break;
-		}*/
+		}
 
 		//Maquina de estados mover la Pickup
 		switch (statePickup)
 		{
 		case 0:
-			//std::cout << "Advance:" << std::endl;
-			matrixModelPickup = glm::translate(matrixModelPickup, glm::vec3(0.0, 0.0, -0.1));
-			offsetPickupAdvance += 0.01;
-			if (offsetPickupAdvance > 2.0) {
+			//std::cout << "Advance Pickup:" << offsetPickupAdvance << std::endl;
+			matrixModelPickup = glm::translate(matrixModelPickup, glm::vec3(0.0, 0.0, 0.3));
+			offsetPickupAdvance += 0.1;
+			if (offsetPickupAdvance > 65.0) {
 				offsetPickupAdvance = 0.0;
 				statePickup = 1;
 			}
 			break;
 		case 1:
-			//std::cout << "Turn" << std::endl;
-			matrixModelPickup = glm::translate(matrixModelPickup, glm::vec3(0.0, 0.0, -0.01));
-			matrixModelPickup = glm::rotate(matrixModelPickup, glm::radians(0.05f), glm::vec3(0, 1, 0));
-			offsetPickupRot += 0.05;
+			//std::cout << "Turn Pickup" << offsetPickupRot << std::endl;
+			matrixModelPickup = glm::translate(matrixModelPickup, glm::vec3(0.0, 0.0, 0.3));
+			matrixModelPickup = glm::rotate(matrixModelPickup, glm::radians(0.5f), glm::vec3(0, 1, 0));
+			offsetPickupRot += 0.5;
 			if (offsetPickupRot > 90) {
 				offsetPickupRot = 0.0;
 				statePickup = 0;
@@ -2244,7 +2500,7 @@ void applicationLoop() {
 	}
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 	init(800, 700, "Window GLFW", false);
 	applicationLoop();
 	destroy();

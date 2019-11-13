@@ -58,6 +58,11 @@ Shader shaderMulLighting;
 
 std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
 
+float rot1 = 0.0, rot2 = 0.0, rot3 = 0.0, rot4 = 0.0, rot5 = 0.0, rot6 = 0.0, rot7 = 0.0, rot8 = 0.0, rot9 = 0.0, rot10 = 0.0;
+float rot11 = 0.0, rot12 = 0.0, rot13 = 0.0, rot14 = 0.0, rot15 = 0.0;
+float rot0 = 0.0, dz = 0.0, dz2 = 0.2;;///Variables para rotar y desplazar en el eje z
+bool sentido = true;
+
 Sphere sphere1(20, 20);
 Sphere sphere2(20, 20);
 Sphere sphere3(20, 20);
@@ -80,6 +85,7 @@ Box techo;
 
 GLuint textureID1, textureID2, textureID3, textureID4, textureID5, textureID6, textureID7, textureID8;
 GLuint textureID9, textureID10, textureID11, textureID12, textureID13, textureID14, textureID15, textureID16;
+GLuint textureID17, textureID18, textureID19, textureID20, textureID21, textureID22, textureID23, textureID24;
 
 //Models complex instances
 Model modelRock;//4
@@ -112,11 +118,6 @@ std::string fileNames[6] = { "../Textures/mp_sincity/sincity_ft.tga",
 bool exitApp = false;
 int lastMousePosX, offsetX = 0;
 int lastMousePosY, offsetY = 0;
-
-float rot0 = 0.0, dz = 0.0;
-
-float rot1 = 0.0, rot2 = 0.0, rot3 = 0.0, rot4 = 0.0;
-bool sentido = true;
 
 double deltaTime;
 
@@ -209,7 +210,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Método setter que colocar el apuntador al shader
 	sphere2.setShader(&shaderColorLighting);
 	//Setter para poner el color de la geometria
-	sphere2.setColor(glm::vec4(1.0, 1.0, 1.0, 1.0));
+	sphere2.setColor(glm::vec4(0.0, 0.0, 0.0, 1.0));
 
 	// Inicializar los buffers VAO, VBO, EBO
 	sphereLamp.init();
@@ -320,7 +321,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelPickup.loadModel("../models/car/Pickup/L200-OBJ.obj");
 	modelPickup.setShader(&shaderMulLighting);
 
-	camera->setPosition(glm::vec3(0.0, 0.0, 8.0));
+	camera->setPosition(glm::vec3(11.5, -3.0, 16.0));
 
 	// Descomentar
 	// Definimos el tamanio de la imagen
@@ -805,6 +806,134 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Libera la memoria de la textura
 	textureVidrio.freeImage(bitmap);
 
+	Texture textureGround("../Textures/House/pasto1.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = textureGround.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = textureGround.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID18);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID18);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureGround.freeImage(bitmap);
+
+	Texture textureMetal("../Textures/House/metal.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = textureMetal.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = textureMetal.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID19);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID19);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureMetal.freeImage(bitmap);
+
+	Texture texturePantalon("../Textures/House/pantalonCafe.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = texturePantalon.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = texturePantalon.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID20);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID20);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	texturePantalon.freeImage(bitmap);
+
+	Texture textureCorbata("../Textures/House/corbataBobEsponja.png");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = textureCorbata.loadImage(false);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = textureCorbata.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID21);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID21);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureCorbata.freeImage(bitmap);
+
 	// Carga de texturas para el skybox
 	Texture skyboxTexture = Texture("");
 	glGenTextures(1, &skyboxTextureID);
@@ -1024,13 +1153,13 @@ void applicationLoop() {
 
 		// Propiedades de la luz para objetos con multiples luces
 		shaderMulLighting.setVectorFloat3("viewPos", glm::value_ptr(camera->getPosition()));
-		shaderMulLighting.setVectorFloat3("directionalLight.light.ambient", glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
-		shaderMulLighting.setVectorFloat3("directionalLight.light.diffuse", glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
-		shaderMulLighting.setVectorFloat3("directionalLight.light.specular", glm::value_ptr(glm::vec3(0.9, 0.9, 0.9)));
+		shaderMulLighting.setVectorFloat3("directionalLight.light.ambient", glm::value_ptr(glm::vec3(0.3, 0.3, 0.0)));
+		shaderMulLighting.setVectorFloat3("directionalLight.light.diffuse", glm::value_ptr(glm::vec3(0.5, 0.5, 0.0)));
+		shaderMulLighting.setVectorFloat3("directionalLight.light.specular", glm::value_ptr(glm::vec3(0.9, 0.9, 0.0)));
 		//shaderMulLighting.setVectorFloat3("directionalLight.direction", glm::value_ptr(glm::vec3(-1.0, 0.0, 0.0)));//2 Se cambio de un -1.0 a 1.0 en z
 		shaderMulLighting.setVectorFloat3("directionalLight.direction", glm::value_ptr(glm::vec3(0.0, 1.0, 0.0)));
 		//Esto es para la luz spotlight
-		shaderMulLighting.setInt("spotLightCount",1);//7
+		shaderMulLighting.setInt("spotLightCount",3);//7
 		shaderMulLighting.setVectorFloat3("spotLights[0].position",glm::value_ptr(camera->getPosition()));//7
 		shaderMulLighting.setVectorFloat3("spotLights[0].direction", glm::value_ptr(camera->getFront()));//7
 		shaderMulLighting.setVectorFloat3("spotLights[0].light.ambient", glm::value_ptr(glm::vec3(0.1,0.1,0.1)));//7
@@ -1053,22 +1182,33 @@ void applicationLoop() {
 		shaderMulLighting.setFloat("pointLights[0].linear", 0.0001);
 		shaderMulLighting.setFloat("pointLights[0].quadratic", 0.001);*/
 
-		/*shaderMulLighting.setVectorFloat3("spotLights[0].position", glm::value_ptr(glm::vec3(11.5, 0.0, 5.4)));//7
-		shaderMulLighting.setVectorFloat3("spotLights[0].direction", glm::value_ptr(glm::vec3(11.5, -5.0, 5.4)));//7
-		shaderMulLighting.setVectorFloat3("spotLights[0].light.ambient", glm::value_ptr(glm::vec3(0.1, 0.1, 0.1)));//7
-		shaderMulLighting.setVectorFloat3("spotLights[0].light.diffuse", glm::value_ptr(glm::vec3(0.4, 0.4, 0.4)));//7
-		shaderMulLighting.setVectorFloat3("spotLights[0].light.specular", glm::value_ptr(glm::vec3(0.6, 0.6, 0.6)));//7
-		shaderMulLighting.setFloat("spotLights[0].cutOff", cos(glm::radians(12.5)));//7
-		shaderMulLighting.setFloat("spotLights[0].outerCutOff", cos(glm::radians(25.0)));//7
-		shaderMulLighting.setFloat("spotLights[0].constant", 1.0);//8
-		shaderMulLighting.setFloat("spotLights[0].linear", 0.1);//8
-		shaderMulLighting.setFloat("spotLights[0].quadratic", 0.05);//8 Al alejarnos se ilumina menos*/
+		shaderMulLighting.setVectorFloat3("spotLights[1].position", glm::value_ptr(glm::vec3(7.0, -3.0, 6.0)));
+		shaderMulLighting.setVectorFloat3("spotLights[1].direction", glm::value_ptr(glm::vec3(11.5, -5.0, -5.4)));
+		shaderMulLighting.setVectorFloat3("spotLights[1].light.ambient", glm::value_ptr(glm::vec3(0.0, 0.0, 1.0)));
+		shaderMulLighting.setVectorFloat3("spotLights[1].light.diffuse", glm::value_ptr(glm::vec3(0.0, 0.0, 4.0)));
+		shaderMulLighting.setVectorFloat3("spotLights[1].light.specular", glm::value_ptr(glm::vec3(0.0, 0.0, 6.0)));
+		shaderMulLighting.setFloat("spotLights[1].cutOff", cos(glm::radians(12.5)));
+		shaderMulLighting.setFloat("spotLights[1].outerCutOff", cos(glm::radians(25.0)));
+		shaderMulLighting.setFloat("spotLights[1].constant", 1.0);
+		shaderMulLighting.setFloat("spotLights[1].linear", 0.1);
+		shaderMulLighting.setFloat("spotLights[1].quadratic", 0.05);
 
-		/*shaderMulLighting.setVectorFloat3("viewPos", glm::value_ptr(camera->getPosition()));
-		shaderMulLighting.setVectorFloat3("directionalLight.light.ambient", glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
-		shaderMulLighting.setVectorFloat3("directionalLight.light.diffuse", glm::value_ptr(glm::vec3(0.5, 0.5, 0.5)));
-		shaderMulLighting.setVectorFloat3("directionalLight.light.specular", glm::value_ptr(glm::vec3(0.9, 0.9, 0.9)));
-		shaderMulLighting.setVectorFloat3("directionalLight.direction", glm::value_ptr(glm::vec3(-1.0, 0.0, 0.0)));*/
+		shaderMulLighting.setVectorFloat3("spotLights[2].position", glm::value_ptr(glm::vec3(11.5, -0.05, 4.0)));
+		shaderMulLighting.setVectorFloat3("spotLights[2].direction", glm::value_ptr(glm::vec3(0.0, -1.0, 0.0)));
+		shaderMulLighting.setVectorFloat3("spotLights[2].light.ambient", glm::value_ptr(glm::vec3(0.0, 0.5, 0.5)));
+		shaderMulLighting.setVectorFloat3("spotLights[2].light.diffuse", glm::value_ptr(glm::vec3(0.0, 2.0, 2.0)));
+		shaderMulLighting.setVectorFloat3("spotLights[2].light.specular", glm::value_ptr(glm::vec3(0.0, 3.0, 3.0)));
+		shaderMulLighting.setFloat("spotLights[2].cutOff", cos(glm::radians(12.5)));
+		shaderMulLighting.setFloat("spotLights[2].outerCutOff", cos(glm::radians(25.0)));
+		shaderMulLighting.setFloat("spotLights[2].constant", 1.0);
+		shaderMulLighting.setFloat("spotLights[2].linear", 0.1);
+		shaderMulLighting.setFloat("spotLights[2].quadratic", 0.05);
+
+		shaderMulLighting.setVectorFloat3("viewPos", glm::value_ptr(glm::vec3(0.0, 4.0, 6.0)));
+		shaderMulLighting.setVectorFloat3("directionalLight.light.ambient", glm::value_ptr(glm::vec3(0.4, 0.0, 0.4)));
+		shaderMulLighting.setVectorFloat3("directionalLight.light.diffuse", glm::value_ptr(glm::vec3(0.7, 0.0, 0.7)));
+		shaderMulLighting.setVectorFloat3("directionalLight.light.specular", glm::value_ptr(glm::vec3(1.2, 0.0, 1.2)));
+		shaderMulLighting.setVectorFloat3("directionalLight.direction", glm::value_ptr(glm::vec3(1.0, 0.0, 0.0)));
 
 		glm::mat4 lightModelmatrix = glm::rotate(glm::mat4(1.0f), angle,
 				glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1245,6 +1385,210 @@ void applicationLoop() {
 		skyboxSphere.render();
 		glCullFace(oldCullFaceMode);
 		glDepthFunc(oldDepthFuncMode);
+
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 model2 = glm::mat4(1.0f);
+		///////////////////////////////////////////////////////////////////////////BOB ESPONJA
+		model = glm::translate(model, glm::vec3(11.5, -3.0, 5.0));
+		model = glm::rotate(model, rot0, glm::vec3(0, 1, 0));
+		//box1.enableWireMode();///6
+		glBindTexture(GL_TEXTURE_2D, textureID1);
+		box1.render(glm::scale(model, glm::vec3(1.0, 1.0, 0.1)));
+
+		//Articulacion1 
+		glm::mat4 j1 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		//sphere1.enableWireMode();
+		sphere1.render(glm::scale(j1, glm::vec3(0.1, 0.1, 0.1)));
+		j1 = glm::rotate(j1, rot1, glm::vec3(0, 0, 1));
+		j1 = glm::rotate(j1, rot2, glm::vec3(0, 1, 0));
+
+		// Hueso 1
+		glm::mat4 l1 = glm::translate(j1, glm::vec3(0.25f, 0.0, 0.0));
+		l1 = glm::rotate(l1, glm::radians(90.0f), glm::vec3(0, 0, 1.0));
+		//cylinder1.enableWireMode();
+		cylinder2.render(glm::scale(l1, glm::vec3(0.1, 0.5, 0.1)));
+
+		//Articulacion2 
+		glm::mat4 j2 = glm::translate(j1, glm::vec3(0.5, 0.0f, 0.0f));
+		j2 = glm::rotate(j2, rot3, glm::vec3(0.0, 0.0, 1.0));
+		j2 = glm::rotate(j2, rot4, glm::vec3(1.0, 0.0, 0.0));
+		//sphere1.enableWireMode();
+		sphere1.render(glm::scale(j2, glm::vec3(0.1, 0.1, 0.1)));
+
+		// Hueso 2
+		glm::mat4 l2 = glm::translate(j2, glm::vec3(0.25, 0.0, 0.0));
+		l2 = glm::rotate(l2, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		//cylinder1.enableWireMode();
+		cylinder2.render(glm::scale(l2, glm::vec3(0.1, 0.5, 0.1)));
+		//shader.turnOff();
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//Ojos
+		glm::mat4 ojo = glm::translate(model, glm::vec3(0.25, 0.25, 0.05));
+		//sphere1.enableWireMode();
+		sphere1.render(glm::scale(ojo, glm::vec3(0.2, 0.2, 0.1)));
+		glm::mat4 ojo2 = glm::translate(model, glm::vec3(-0.25, 0.25, 0.05));
+		//sphere1.enableWireMode();
+		sphere1.render(glm::scale(ojo2, glm::vec3(0.2, 0.2, 0.1)));
+
+		//Articulacion 3
+		glm::mat4 j3 = glm::translate(model, glm::vec3(-0.5, 0.0f, 0.0f));
+		//sphere1.enableWireMode();
+		glBindTexture(GL_TEXTURE_2D, textureID1);
+		sphere1.render(glm::scale(j3, glm::vec3(0.1, 0.1, 0.1)));
+		j3 = glm::rotate(j3, rot5, glm::vec3(0, 0, 1));
+		j3 = glm::rotate(j3, rot6, glm::vec3(0, 1, 0));
+
+		// Hueso 3
+		glm::mat4 l3 = glm::translate(j3, glm::vec3(-0.25, 0.0, 0.0));
+		l3 = glm::rotate(l3, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		//cylinder1.enableWireMode();
+		cylinder2.render(glm::scale(l3, glm::vec3(0.1, 0.5, 0.1)));
+		//shader.turnOff();
+
+		//Articulacion 4
+		glm::mat4 j4 = glm::translate(j3, glm::vec3(-0.5, 0.0f, 0.0f));
+		j4 = glm::rotate(j4, rot7, glm::vec3(0.0, 0.0, 1.0));
+		j4 = glm::rotate(j4, rot8, glm::vec3(1.0, 0.0, 0.0));
+		//sphere1.enableWireMode();
+		sphere1.render(glm::scale(j4, glm::vec3(0.1, 0.1, 0.1)));
+
+		// Hueso 4
+		glm::mat4 l4 = glm::translate(j4, glm::vec3(-0.25, 0.0, 0.0));
+		l4 = glm::rotate(l4, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		//cylinder1.enableWireMode();
+		cylinder2.render(glm::scale(l4, glm::vec3(0.1, 0.5, 0.1)));
+		//shader.turnOff();
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//Articulacion 5
+		glm::mat4 j5 = glm::translate(model, glm::vec3(-0.2, -0.5, 0.0f));
+		//sphere1.enableWireMode();
+		glBindTexture(GL_TEXTURE_2D, textureID20);
+		sphere1.render(glm::scale(j5, glm::vec3(0.1, 0.1, 0.1)));
+		j5 = glm::rotate(j5, rot9, glm::vec3(0, 0, 1));
+		j5 = glm::rotate(j5, rot10, glm::vec3(0, 1, 0));
+
+		// Hueso 5
+		glm::mat4 l5 = glm::translate(j5, glm::vec3(0.0, -0.25, 0.0));
+		l5 = glm::rotate(l5, glm::radians(180.0f), glm::vec3(0.0, 0.0, 1.0));
+		//cylinder1.enableWireMode();
+		cylinder2.render(glm::scale(l5, glm::vec3(0.1, 0.5, 0.1)));
+		//shader.turnOff();
+
+		//Articulacion 6
+		glm::mat4 j6 = glm::translate(model, glm::vec3(0.2, -0.5, 0.0f));
+		j6 = glm::rotate(j6, rot11, glm::vec3(0.0, 0.0, 1.0));
+		j6 = glm::rotate(j6, rot12, glm::vec3(1.0, 0.0, 0.0));
+		//sphere1.enableWireMode();
+		sphere1.render(glm::scale(j6, glm::vec3(0.1, 0.1, 0.1)));
+
+		// Hueso 6
+		glm::mat4 l6 = glm::translate(j6, glm::vec3(0.0, -0.25, 0.0));
+		l6 = glm::rotate(l6, glm::radians(180.0f), glm::vec3(0.0, 0.0, 1.0));
+		//cylinder1.enableWireMode();
+		cylinder2.render(glm::scale(l6, glm::vec3(0.1, 0.5, 0.1)));
+		glBindTexture(GL_TEXTURE_2D, 0);
+		//shader.turnOff();
+
+		//Articulacion 7
+		glm::mat4 j7 = glm::translate(j5, glm::vec3(0.0, -0.5, 0.0f));
+		//sphere1.enableWireMode();
+		glBindTexture(GL_TEXTURE_2D, textureID1);
+		sphere1.render(glm::scale(j7, glm::vec3(0.1, 0.1, 0.1)));
+
+		// Hueso 7
+		glm::mat4 l7 = glm::translate(j7, glm::vec3(0.0, -0.25, 0.0));
+		l7 = glm::rotate(l7, glm::radians(180.0f), glm::vec3(0.0, 0.0, 1.0));
+		//cylinder2.enableWireMode();
+		cylinder2.render(glm::scale(l7, glm::vec3(0.1, 0.5, 0.1)));
+		//shader.turnOff();
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//Articulacion 8
+		glm::mat4 j8 = glm::translate(j6, glm::vec3(0.0, -0.5, 0.0f));
+		//sphere1.enableWireMode();
+		glBindTexture(GL_TEXTURE_2D, textureID1);
+		sphere1.render(glm::scale(j8, glm::vec3(0.1, 0.1, 0.1)));
+
+		// Hueso 8
+		glm::mat4 l8 = glm::translate(j8, glm::vec3(0.0, -0.25, 0.0));
+		l8 = glm::rotate(l8, glm::radians(180.0f), glm::vec3(0.0, 0.0, 1.0));
+		//cylinder2.enableWireMode();
+		cylinder2.render(glm::scale(l8, glm::vec3(0.1, 0.5, 0.1)));
+		glBindTexture(GL_TEXTURE_2D, 0);
+		//shader.turnOff();
+
+		//Pantalones cuadrados
+		glm::mat4 b2 = glm::translate(model, glm::vec3(0.0, -0.35, 0.0));
+		b2 = glm::rotate(b2, glm::radians(0.0f), glm::vec3(0.0, 0.0, 1.0));
+		//box2.enableWireMode();///6
+		glBindTexture(GL_TEXTURE_2D, textureID20);
+		box2.render(glm::scale(b2, glm::vec3(1.01, 0.3, 0.11)));
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//Corbata
+		glm::mat4 corbata = glm::translate(model, glm::vec3(0.0, -0.35, 0.06));
+		corbata = glm::rotate(corbata, glm::radians(0.0f), glm::vec3(0.0, 0.0, 1.0));
+		glBindTexture(GL_TEXTURE_2D, textureID21);
+		box2.render(glm::scale(corbata, glm::vec3(1.01, 0.3, 0.01)));
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//Iris
+		glm::mat4 iris = glm::translate(model, glm::vec3(0.25, 0.25, 0.1));
+		//sphere2.enableWireMode();
+		sphere2.render(glm::scale(iris, glm::vec3(0.07, 0.07, 0.04)));
+		glm::mat4 iris2 = glm::translate(model, glm::vec3(-0.25, 0.25, 0.1));
+		//sphere2.enableWireMode();
+		sphere2.render(glm::scale(iris2, glm::vec3(0.07, 0.07, 0.04)));
+
+		//shader.turnOff();
+
+///////////////////////////////////////////////////////////////////////////R2D2
+
+		//Cabeza
+		model2 = glm::translate(model2, glm::vec3(11.5, -3.0, 10.0));
+		model2 = glm::rotate(model2, rot13, glm::vec3(0, 1, 0));
+		glBindTexture(GL_TEXTURE_2D, textureID19);
+		sphere3.render(glm::scale(model2, glm::vec3(1.0, 1.0, 1.0)));
+
+		//Cuerpo 
+		glm::mat4 l9 = glm::translate(model2, glm::vec3(0.0, -0.6, 0.0f));
+		//l9 = glm::rotate(l9, glm::radians(90.0f), glm::vec3(0, 0, 1.0));
+		cylinder2.render(glm::scale(l9, glm::vec3(1.0, 1.0, 1.0)));
+		//j9 = glm::rotate(j9, rot14, glm::vec3(0, 0, 1));
+		//j9 = glm::rotate(j9, rot15, glm::vec3(0, 1, 0));
+
+		//Brazo robótico 1
+		glm::mat4 j10 = glm::translate(l9, glm::vec3(0.61, -0.1, 0.0));
+		j10 = glm::rotate(j10, rot14, glm::vec3(1.0, 0.0, 0.0));
+		box3.render(glm::scale(j10, glm::vec3(0.15, 1.3, 0.15)));
+
+		//Brazo robótico 2
+		glm::mat4 j11 = glm::translate(l9, glm::vec3(-0.61, -0.1, 0.0));
+		j11 = glm::rotate(j11, rot15, glm::vec3(1.0, 0.0, 0.0));
+		box3.render(glm::scale(j11, glm::vec3(0.15, 1.3, 0.15)));
+
+		//Pie robótico 1
+		glm::mat4 j12 = glm::translate(j10, glm::vec3(0.0, -0.7, 0.0));
+		box3.render(glm::scale(j12, glm::vec3(0.15, 0.15, 0.4)));
+
+		//Pie robótico 2
+		glm::mat4 j13 = glm::translate(j11, glm::vec3(0.0, -0.7, 0.0));
+		box3.render(glm::scale(j13, glm::vec3(0.15, 0.15, 0.4)));
+
+		//Sosten del cuerpo
+		glm::mat4 l10 = glm::translate(l9, glm::vec3(0.0, -0.3, 0.0f));
+		cylinder2.render(glm::scale(l10, glm::vec3(0.7, 0.7, 0.7)));
+		glm::mat4 l11 = glm::translate(l10, glm::vec3(0.0, -0.3, 0.0f));
+		cylinder2.render(glm::scale(l11, glm::vec3(0.3, 0.3, 0.3)));
+		glm::mat4 j14 = glm::translate(l11, glm::vec3(0.0, -0.2, 0.0));
+		box3.render(glm::scale(j14, glm::vec3(0.15, 0.15, 0.3)));
+
+		//Ojo robot
+		glm::mat4 eye = glm::translate(model2, glm::vec3(0.0, 0.04, 0.45));
+		sphere2.render(glm::scale(eye, glm::vec3(0.2, 0.2, 0.17)));
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 
 		//Iniciamos a definir la casa----------------------------------------------------------------------------------
@@ -1717,6 +2061,16 @@ void applicationLoop() {
 		glBindTexture(GL_TEXTURE_2D, textureID15);
 		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
 		sphereLamp2.render(modelLamp4);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Terreno<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		glm::mat4 modelGround = glm::mat4(1.0);
+		modelGround = glm::translate(modelGround, glm::vec3(0.0, -5.2, 0.0));
+		modelGround = glm::rotate(modelGround, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelGround = glm::scale(modelGround, glm::vec3(100.0, 100.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID18);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		techo.render(modelGround);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		//----------------------------------------------Modelos----------------------------------------------------

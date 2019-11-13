@@ -84,8 +84,14 @@ Model modelEclipseWheelsFrontal;
 Model modelEclipseWheelsRear;
 Model modelHeliChasis;
 Model modelHeliHeliMid;
+Model modelHeliBack;
+Model modelPickup;
+Model modelPickupChasis;
+Model modelPickupLlanta;
+Model modelPickupPuerta;
 
-GLuint textureID1, textureID2, textureID3, textureID4, textureID5;
+GLuint textureID1, textureID2, textureID3, textureID4, textureID5, textureID6, textureID7, textureID8;
+GLuint textureID9, textureID10, textureID11, textureID12, textureID13, textureID14, textureID15, textureID16;
 GLuint skyboxTextureID;
 
 GLenum types[6] = {
@@ -108,6 +114,7 @@ int lastMousePosX, offsetX = 0;
 int lastMousePosY, offsetY = 0;
 
 float rot0 = 0.0, dz = 0.0;
+float rotHeli = 0.0;
 
 float rot1 = 0.0, rot2 = 0.0, rot3 = 0.0, rot4 = 0.0;
 
@@ -279,7 +286,20 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelHeliHeliMid.loadModel("../models/Helicopter/Mi_24_heli.obj");
 	modelHeliHeliMid.setShader(&shaderMulLighting);//10
 
-	camera->setPosition(glm::vec3(0.0, 3.0, 4.0));
+	modelHeliBack.loadModel("../models/Helicopter/HeliBack.obj");
+	modelHeliBack.setShader(&shaderMulLighting);
+
+	modelPickup.loadModel("../models/car/Pickup/L200-OBJ.obj");
+	modelPickup.setShader(&shaderMulLighting);
+
+	modelPickupChasis.loadModel("../models/car/Pickup/Pickup_chasis.obj");
+	modelPickupChasis.setShader(&shaderMulLighting);
+	modelPickupLlanta.loadModel("../models/car/Pickup/Pickup_Llantas.obj");
+	modelPickupLlanta.setShader(&shaderMulLighting);
+	modelPickupPuerta.loadModel("../models/car/Pickup/Pickup_puerta.obj");
+	modelPickupPuerta.setShader(&shaderMulLighting);
+
+	camera->setPosition(glm::vec3(13.0, 3.0, 30.0));
 
 	// Descomentar
 	// Definimos el tamanio de la imagen
@@ -443,6 +463,103 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Libera la memoria de la textura
 	texture5.freeImage(bitmap);
 
+	Texture texturePlatform("../Textures/House/plataforma.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = texturePlatform.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = texturePlatform.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID6);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID6);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	texturePlatform.freeImage(bitmap);
+
+	Texture textureCarretera("../Textures/House/carretera.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = textureCarretera.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = textureCarretera.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID7);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID7);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureCarretera.freeImage(bitmap);
+
+	Texture textureCarretera2("../Textures/House/carretera2.jpg");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	// Voltear la imagen
+	bitmap = textureCarretera2.loadImage(true);
+	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
+	data = textureCarretera2.convertToData(bitmap, imageWidth, imageHeight);
+	// Creando la textura con id 1
+	glGenTextures(1, &textureID8);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureID8);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Verifica si se pudo abrir la textura
+	if (data) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0,
+			GL_BGRA, GL_UNSIGNED_BYTE, data);
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureCarretera2.freeImage(bitmap);
+
+	//------------------------------------------------------------------------------------------------------------------
 	// Carga de texturas para el skybox
 	Texture skyboxTexture = Texture("");
 	glGenTextures(1, &skyboxTextureID);
@@ -582,7 +699,8 @@ bool processInput(bool continueApplication) {
 		rot4 -= 0.01;
 
 	if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		rot0 = 0.1;
+		//rot0 = 0.1;
+		rotHeli += 0.01;
 	else if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		rot0 = -0.1;
 	if (modelSelected == 0 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
@@ -603,13 +721,34 @@ void applicationLoop() {
 	float angle = 0.0;
 	float ratio = 30.0;
 	glm::mat4 modelMatrixEclipse = glm::mat4(1.0f);
-	modelMatrixEclipse = glm::translate(modelMatrixEclipse, glm::vec3(20, 0, 10.0));
+	modelMatrixEclipse = glm::translate(modelMatrixEclipse, glm::vec3(4.0, 0, -8.0));
 	int state = 0;
+	int state2 = 0;
 	float advanceCount = 0.0;
+	float advanceCount2 = 0.0;
 	float rotCount = 0.0;
 	float rotWheelx = 0.0;//4
 	float rotWheely = 0.0;//8
 	float rotHeliHeliy = 0.0;//11
+
+	int stateHelicopter = 0;
+	float HelicopterAdvance = 0.0;
+	glm::mat4 modelMatrixHeliChasis = glm::mat4(1.0);
+	modelMatrixHeliChasis = glm::translate(modelMatrixHeliChasis, glm::vec3(-15.0, 12.0, 13.0));
+
+	/*glm::mat4 matrixModelPickup = glm::mat4(1.0);
+	matrixModelPickup = glm::translate(matrixModelPickup, glm::vec3(2.0, 0.0, -9.0));
+	matrixModelPickup = glm::scale(matrixModelPickup, glm::vec3(0.1, 0.1, 0.1));
+	*/
+	int wayPickup[24] = { 0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 2, 0, 1, 0, 1, 0, 2};
+	int statePickup = 0;
+	int j = 0;
+	float PickupAdvance = 0.0;
+	float PickupRot = 0.0;
+
+	glm::mat4 matrixModelPickupChasis = glm::mat4(1.0);
+	matrixModelPickupChasis = glm::translate(matrixModelPickupChasis, glm::vec3(2.0, 0.0, -9.0));
+	matrixModelPickupChasis = glm::scale(matrixModelPickupChasis, glm::vec3(0.1, 0.1, 0.1));
 
 	lastTime = TimeManager::Instance().GetTime();
 	while (psi) {
@@ -962,7 +1101,7 @@ void applicationLoop() {
 
 		// Esto es para las vias del tren
 		glm::mat4 matrixModelRailroad = glm::mat4(1.0);
-		matrixModelRailroad = glm::translate(matrixModelRailroad, glm::vec3(3.0, 0.0, 15.0));
+		matrixModelRailroad = glm::translate(matrixModelRailroad, glm::vec3(3.0, 0.0, 20.0));
 		modelRailRoad.render(matrixModelRailroad);
 		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
 		glActiveTexture(GL_TEXTURE0);
@@ -997,10 +1136,7 @@ void applicationLoop() {
 		glActiveTexture(GL_TEXTURE0);//3
 
 		// Render for the Helicopter//10
-		glm::mat4 modelMatrixHeliChasis = glm::mat4(1.0);
-		modelMatrixHeliChasis = glm::translate(modelMatrixHeliChasis, glm::vec3(-10.0,5.0,5.0));
 		modelHeliChasis.render(modelMatrixHeliChasis);
-		glActiveTexture(GL_TEXTURE0);
 
 		// Render for the Helice
 		glm::mat4 modelMatrixHeliHeliMid = glm::mat4(modelMatrixHeliChasis);
@@ -1008,7 +1144,132 @@ void applicationLoop() {
 		modelMatrixHeliHeliMid = glm::rotate(modelMatrixHeliHeliMid, rotHeliHeliy, glm::vec3(0.0, 1.0, 0.0));//11
 		modelMatrixHeliHeliMid = glm::translate(modelMatrixHeliHeliMid, glm::vec3(0.003344, -1.88318, 0.254566));//12
 		modelHeliHeliMid.render(modelMatrixHeliHeliMid);
-		glActiveTexture(GL_TEXTURE0);//10
+
+		// Render for the HeliceBack
+		glm::mat4 modelMatrixHeliHeliBack = glm::mat4(modelMatrixHeliChasis);
+		modelMatrixHeliHeliBack = glm::translate(modelMatrixHeliHeliBack, glm::vec3(0.45746, 2.1219, -5.6403));
+		modelMatrixHeliHeliBack = glm::rotate(modelMatrixHeliHeliBack, rotHeliHeliy, glm::vec3(1.0, 0.0, 0.0));
+		modelHeliBack.render(modelMatrixHeliHeliBack);
+		glActiveTexture(GL_TEXTURE0);
+
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Plataforma del helicoptero<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		glm::mat4 modelPlatform = glm::mat4(1.0);
+		modelPlatform = glm::translate(modelPlatform, glm::vec3(-15.0, 0.02, 30.0));
+		modelPlatform = glm::rotate(modelPlatform, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelPlatform = glm::scale(modelPlatform, glm::vec3(15.0, 15.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID6);
+		box2.render(modelPlatform);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Carretera<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		glm::mat4 modelHighway1 = glm::mat4(1.0);
+		modelHighway1 = glm::translate(modelHighway1, glm::vec3(2.0, 0.02, 0.0));
+		modelHighway1 = glm::rotate(modelHighway1, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway1 = glm::rotate(modelHighway1, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway1 = glm::scale(modelHighway1, glm::vec3(24.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID7);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		box2.render(modelHighway1);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway2 = glm::mat4(1.0);
+		modelHighway2 = glm::translate(modelHighway2, glm::vec3(21.0, 0.02, 0.0));
+		modelHighway2 = glm::rotate(modelHighway2, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway2 = glm::rotate(modelHighway2, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway2 = glm::scale(modelHighway2, glm::vec3(24.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID7);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		box2.render(modelHighway2);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway3 = glm::mat4(1.0);
+		modelHighway3 = glm::translate(modelHighway3, glm::vec3(11.5, 0.02, -15.0));
+		modelHighway3 = glm::rotate(modelHighway3, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway3 = glm::scale(modelHighway3, glm::vec3(13.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID7);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		box2.render(modelHighway3);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway4 = glm::mat4(1.0);
+		modelHighway4 = glm::translate(modelHighway4, glm::vec3(11.5, 0.02, 15.0));
+		modelHighway4 = glm::rotate(modelHighway4, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway4 = glm::scale(modelHighway4, glm::vec3(13.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID7);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		box2.render(modelHighway4);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway5 = glm::mat4(1.0);
+		modelHighway5 = glm::translate(modelHighway5, glm::vec3(2.0, 0.02, -15.0));
+		modelHighway5 = glm::rotate(modelHighway5, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway5 = glm::rotate(modelHighway5, glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway5 = glm::scale(modelHighway5, glm::vec3(6.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID8);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		box2.render(modelHighway5);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway6 = glm::mat4(1.0);
+		modelHighway6 = glm::translate(modelHighway6, glm::vec3(2.0, 0.02, 15.0));
+		modelHighway6 = glm::rotate(modelHighway6, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway6 = glm::rotate(modelHighway6, glm::radians(-180.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway6 = glm::scale(modelHighway6, glm::vec3(6.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID8);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		box2.render(modelHighway6);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway7 = glm::mat4(1.0);
+		modelHighway7 = glm::translate(modelHighway7, glm::vec3(21.0, 0.02, -15.0));
+		modelHighway7 = glm::rotate(modelHighway7, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway7 = glm::scale(modelHighway7, glm::vec3(6.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID8);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		box2.render(modelHighway7);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glm::mat4 modelHighway8 = glm::mat4(1.0);
+		modelHighway8 = glm::translate(modelHighway8, glm::vec3(21.0, 0.02, 15.0));
+		modelHighway8 = glm::rotate(modelHighway8, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
+		modelHighway8 = glm::rotate(modelHighway8, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		modelHighway8 = glm::scale(modelHighway8, glm::vec3(6.0, 6.0, 0.01));
+		glBindTexture(GL_TEXTURE_2D, textureID8);
+		//shaderTexture.setVectorFloat2("scaleUV",glm::value_ptr(glm::vec2(2.0, 1.0)));
+		box2.render(modelHighway8);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		modelPickupChasis.render(matrixModelPickupChasis);
+		glActiveTexture(GL_TEXTURE0);
+
+		glm::mat4 matrixModelPickupLlanta = glm::mat4(matrixModelPickupChasis);
+		matrixModelPickupLlanta = glm::translate(matrixModelPickupLlanta, glm::vec3(0.0, 3.6385, 30.086));
+		matrixModelPickupLlanta = glm::rotate(matrixModelPickupLlanta, rotWheelx, glm::vec3(1.0, 0.0, 0.0));
+		modelPickupLlanta.render(matrixModelPickupLlanta);
+		glActiveTexture(GL_TEXTURE0);
+
+		glm::mat4 matrixModelPickupLlanta2 = glm::mat4(matrixModelPickupChasis);
+		matrixModelPickupLlanta2 = glm::translate(matrixModelPickupLlanta2, glm::vec3(0.0, 3.9597, -24.654));
+		matrixModelPickupLlanta2 = glm::rotate(matrixModelPickupLlanta2, rotWheelx, glm::vec3(1.0, 0.0, 0.0));
+		modelPickupLlanta.render(matrixModelPickupLlanta2);
+		glActiveTexture(GL_TEXTURE0);
+
+		glm::mat4 matrixModelPickupPuerta = glm::mat4(matrixModelPickupChasis);
+		matrixModelPickupPuerta = glm::translate(matrixModelPickupPuerta, glm::vec3(-0.4417, 9.524, 20.271));
+		matrixModelPickupPuerta = glm::rotate(matrixModelPickupPuerta, rotWheelx, glm::vec3(1.0, 0.0, 0.0));
+		modelPickupPuerta.render(matrixModelPickupPuerta);
+		glActiveTexture(GL_TEXTURE0);
+
+		// Referencia
+		glm::mat4 esferaOrigen = glm::mat4(1.0);
+		esferaOrigen = glm::translate(esferaOrigen, glm::vec3(0.45746, 2.1519, -5.6403));
+		esferaOrigen = glm::scale(esferaOrigen, glm::vec3(0.07,0.07, 0.07));
+		sphere1.render(esferaOrigen);
+
+		glm::mat4 esferaOrigen2 = glm::mat4(1.0);
+		esferaOrigen2 = glm::translate(esferaOrigen2, glm::vec3(0.0, 0.0, 0.0));
+		esferaOrigen2 = glm::scale(esferaOrigen2, glm::vec3(0.07, 0.07, 0.07));
+		sphereLamp.render(esferaOrigen2);
 
 		/*******************************************
 		 * Skybox
@@ -1044,14 +1305,23 @@ void applicationLoop() {
 		switch(state){
 		case 0:
 			modelMatrixEclipse = glm::translate(modelMatrixEclipse, glm::vec3(0.0, 0.0, 0.1));
-			advanceCount += 0.1;
+			if(state2==0)
+				advanceCount += 0.1;
+			else
+				advanceCount2 += 0.1;
 			rotWheely -= 0.01;//9
 			if (rotWheely<0) {
 				rotWheely = 0.0;
 			}//9
-			if(advanceCount > 10.0){
-				advanceCount = 0;
+			if(advanceCount > 24.0){
+				advanceCount = 0.0;
 				state = 1;
+				state2 = 1;
+			}
+			if (advanceCount2> 10.0) {
+				advanceCount2 = 0.0;
+				state = 1;
+				state2 = 0;
 			}
 			break;
 		case 1:
@@ -1068,6 +1338,74 @@ void applicationLoop() {
 			}
 			break;
 		}
+
+		//Maquina de estados para mover el helicoptero
+		switch (stateHelicopter)
+		{
+		case 0:
+			//std::cout << "Advance Helicopter:" << HelicopterAdvance << std::endl;
+			modelMatrixHeliChasis = glm::translate(modelMatrixHeliChasis, glm::vec3(0.0, -0.01, 0.01));
+			HelicopterAdvance += 0.01;
+			//HelicopterAdvance = rotHeli;
+			if (HelicopterAdvance > 12.5) {
+				HelicopterAdvance = 0.0;
+				stateHelicopter = 1;
+			}
+			break;
+		case 1:
+			//std::cout << "Turn Helicopter" << std::endl;
+			modelMatrixHeliChasis = glm::translate(modelMatrixHeliChasis, glm::vec3(0.0, 15.0, -13.0));
+			stateHelicopter = 0;
+		default:
+			break;
+		}
+
+		//Maquina de estados mover la Pickup
+		if (j == 24) {
+			//j = 0;
+			matrixModelPickupPuerta = glm::rotate(matrixModelPickupPuerta, glm::radians(45.0f), glm::vec3(1.0, 0.0, 0.0));
+			/*PickupRot += 1.0;
+			if (PickupRot > 90) {
+				PickupRot = 0.0;
+			}*/
+			j = 0;
+		}
+		statePickup = wayPickup[j];
+		std::cout << "J:" << j << std::endl;
+		//std::cout << "State Pickup:" << statePickup << std::endl;
+		switch (statePickup)
+		{
+		case 0:
+			//std::cout << "Advance Pickup:" << PickupAdvance << std::endl;
+			matrixModelPickupChasis = glm::translate(matrixModelPickupChasis, glm::vec3(0.0, 0.0, 0.3));
+			PickupAdvance += 0.1;
+			if (PickupAdvance > 10.0) {
+				PickupAdvance = 0.0;
+				j++;
+			}
+			break;
+		case 1:
+			//std::cout << "Turn Pickup + " << PickupRot << std::endl;
+			//matrixModelPickupChasis = glm::translate(matrixModelPickupChasis, glm::vec3(0.0, 0.0, 0.3));
+			matrixModelPickupChasis = glm::rotate(matrixModelPickupChasis, glm::radians(0.5f), glm::vec3(0, 1, 0));
+			PickupRot += 0.5;
+			if (PickupRot > 90) {
+				PickupRot = 0.0;
+				j++;
+			}
+		case 2:
+			//std::cout << "Turn Pickup - " << PickupRot << std::endl;
+			matrixModelPickupChasis = glm::translate(matrixModelPickupChasis, glm::vec3(0.0, 0.0, 0.3));
+			matrixModelPickupChasis = glm::rotate(matrixModelPickupChasis, glm::radians(0.5f), glm::vec3(0, -1, 0));
+			PickupRot += 0.5;
+			if (PickupRot > 90) {
+				PickupRot = 0.0;
+				j++;
+			}
+		default:
+			break;
+		}
+
 		glfwSwapBuffers(window);
 	}
 }
